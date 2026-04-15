@@ -213,6 +213,9 @@ If `sta -version` prints a version string (or starts the OpenSTA Tcl shell), you
 
 ## 3. Windows WSL2 Installation
 
+## Follow this video if you want:
+## https://www.youtube.com/watch?v=J8cy6MDkacI
+
 ### 3.1 Enable WSL2
 
 Open **PowerShell as Administrator** and run:
