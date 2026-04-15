@@ -296,14 +296,10 @@ If you see "Hello from Docker!", Docker is correctly integrated with WSL2.
 Inside your **WSL2 Ubuntu terminal**:
 
 ```bash
-cd ~/opensta_workshop/docker/
+cd ~/opensta_workshop
 
-# Option A — Use the build script
-chmod +x build.sh
-./build.sh wsl2
-
-# Option B — Run docker build directly
-docker build -f Dockerfile.wsl2 -t opensta-workshop .
+# Run docker build directly
+docker build -f Dockerfile -t opensta_workshop .
 ```
 
 > **Performance tip:** Keep all workshop files inside the WSL2 filesystem (e.g., `/home/yourname/opensta_workshop/`), **not** on a Windows mount like `/mnt/c/Users/...`. File I/O on Windows mounts is significantly slower under WSL2.
@@ -311,18 +307,8 @@ docker build -f Dockerfile.wsl2 -t opensta-workshop .
 ### 3.7 Run the Container
 
 ```bash
-# Navigate to the workshop root
-cd ~/opensta_workshop/
-
-# Option A — Use the run script
-./docker/run.sh
-
-# Option B — Run docker directly
-docker run --rm -it -v $(pwd):/workspace opensta-workshop
-```
-
-You should see:
-
+# Run docker directly
+docker run --rm -it -v $(pwd):/workspace opensta_workshop
 ```
 ============================================
  OpenSTA Workshop Environment (WSL2)
@@ -369,14 +355,11 @@ The expected directory structure is:
 ```
 opensta_workshop/
 ├── docker/                 # Dockerfiles and scripts
-│   ├── Dockerfile.linux
-│   ├── Dockerfile.wsl2
-│   ├── docker-compose.yml
-│   ├── build.sh
-│   └── run.sh
+│   ├── Dockerfile│        
+│   
 ├── labs/                   # Lab exercises
-│   ├── lab1_basics/
-│   ├── lab2_constraints/
+│   ├── lab0/
+│   ├── lab1/
 │   └── ...
 ├── libs/                   # Technology libraries (.lib files)
 └── INSTALLATION_GUIDE.md   # This file
@@ -388,11 +371,11 @@ When you run the container with `-v $(pwd):/workspace`, your current directory o
 
 ```bash
 # Mount the workshop root directory
-docker run --rm -it -v $(pwd):/workspace opensta-workshop
+docker run --rm -it -v $(pwd):/workspace opensta_workshop
 
 # Inside the container, your files are at:
-ls /workspace/labs/
-ls /workspace/libs/
+ls
+ 
 ```
 
 **Key points about mounted volumes:**
@@ -402,18 +385,20 @@ ls /workspace/libs/
 - Files created inside the container in `/workspace` persist on the host after the container exits.
 - Files created *outside* `/workspace` inside the container are **lost** when the container exits (unless you commit the container).
 
-### 4.3 Using Docker Compose (Alternative)
+### 4.3 Using Docker
 
-If you prefer Docker Compose, a `docker-compose.yml` is provided:
+If you prefer Exciting docker present inside:
 
 ```bash
-cd opensta_workshop/docker/
+cd opensta_workshop/
 
-# Build the image
-docker compose build
+# command to check docker
+docker ps -a
 
 # Start an interactive session
-docker compose run opensta
+docker start -i <container_id>  #If the docker is stopped
+
+docker exec -it <container_id>  #If the docker is still running
 ```
 
 ### 4.4 Test the OpenSTA Installation
@@ -440,7 +425,7 @@ If the workshop includes a sample design (e.g., in `labs/lab1_basics/`), you can
 
 ```bash
 # Inside the container
-cd /workspace/labs/lab1_basics/
+cd /workspace/labs1/
 ```
 
 Create or use the provided Tcl script (e.g., `run_sta.tcl`):
@@ -595,7 +580,7 @@ wsl --shutdown
 
 ```bash
 # Rebuild without cache to start fresh
-docker build --no-cache -f Dockerfile.linux -t opensta-workshop .
+docker build --no-cache -f Dockerfile.linux -t opensta_workshop .
 ```
 
 #### Build Runs Out of Memory
@@ -623,11 +608,14 @@ Then rebuild.
 ```bash
 # ✗ Wrong — mounts only the docker/ subdirectory
 cd opensta_workshop/docker/
-docker run -it -v $(pwd):/workspace opensta-workshop
+docker run -it -v $(pwd):/workspace opensta_workshop
 
 # ✓ Correct — mounts the entire workshop
 cd opensta_workshop/
-docker run -it -v $(pwd):/workspace opensta-workshop
+docker run -it -v $(pwd):/workspace You should see:
+
+```
+
 ```
 
 ---
@@ -656,9 +644,9 @@ This is already configured in the provided Dockerfiles, so this issue typically 
 
 | Command | Description |
 |---|---|
-| `docker build -f Dockerfile.linux -t opensta-workshop .` | Build the image |
-| `docker run --rm -it -v $(pwd):/workspace opensta-workshop` | Run an interactive container |
-| `docker run --rm -v $(pwd):/workspace opensta-workshop sta script.tcl` | Run a script and exit |
+| `docker build -f Dockerfile.linux -t opensta_workshop .` | Build the image |
+| `docker run --rm -it -v $(pwd):/workspace opensta_workshop` | Run an interactive container |
+| `docker run --rm -v $(pwd):/workspace opensta_workshop sta script.tcl` | Run a script and exit |
 | `docker ps` | List running containers |
 | `docker ps -a` | List all containers (including stopped) |
 | `docker images` | List downloaded/built images |
